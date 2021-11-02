@@ -75,7 +75,7 @@ public class ApiController {
      * <b>На четвероочку</b>
      */
 
-    //curl -X POST http://localhost:8080/themes/0/comments/create -H "Content-Type: application/json" -d "{\"text\":\"nice sergey\", \"author\":\"ivan\"}"
+    //curl -X POST http://localhost:8080/themes/0/comments/create -H "Content-Type: application/json" -d "{\"text\":\"nice cocktail\", \"author\":\"alex\"}"
     @PostMapping("themes/{index}/comments/create")
     public void addComment(@PathVariable("index") Integer index, @Validated @RequestBody Comment comment) {
         themes.get(index).addComment(comment);
@@ -104,7 +104,7 @@ public class ApiController {
 
     /** <b>На пятерочку</b>*/
 
-    // curl --get http://localhost:8080/ivan?sort=update
+    // curl --get http://localhost:8080/sandal?sort=update
     @GetMapping("{username}")
     public List<Comment> getCommentsOfUser(@PathVariable("username") String username, @RequestParam String sort) {
         LinkedList<Comment> comments = new LinkedList<>();
@@ -118,7 +118,7 @@ public class ApiController {
             return comments.stream().sorted().collect(Collectors.toList());
         return comments;
     }
-    //curl -X PUT http://localhost:8080/ivan/0/0 -H "Content-Type: application/json" -d "{\"text\":\"nice serjant\"}"
+    //curl -X PUT http://localhost:8080/salo/0/0 -H "Content-Type: application/json" -d "{\"text\":\"nice serjant\"}"
     @PutMapping("{username}/{theme}/{comment}")
     public void updateCommentOfUser(@PathVariable("username") String username,
                                     @PathVariable("theme") Integer themeIndex,
@@ -128,11 +128,16 @@ public class ApiController {
         themes.get(themeIndex).updateComment(commentIndex, comment);
     }
 
-    // curl -X DELETE http://localhost:8080/ivan
+    // curl -X DELETE http://localhost:8080/ssalo
     @DeleteMapping("{username}")
     public void deleteCommentsOfUser(@PathVariable("username") String username) {
         for (var theme : themes) {
-            theme.getComments().removeIf(comment -> comment.getAuthor().equals(username));
+            //theme.getComments().removeIf(comment -> comment.getAuthor().equals(username));
+            for (var comment: theme.getComments()) {
+                if (comment.getAuthor().equals(username)){
+                    theme.getComments().remove(comment);
+                }
+            }
         }
     }
 
